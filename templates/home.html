@@ -3,112 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FWI Prediction</title>
+    <title>Predict - Forest Fire</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-<style>
-/* Background gradient */
-.bg-gradient {
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
-    min-height: 100vh;
-}
+        .form-box {
+            background: rgba(255,255,255,0.06);
+            padding: 35px;
+            border-radius: 18px;
+            width: 95%;
+            max-width: 520px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.4);
+            backdrop-filter: blur(15px);
+        }
 
-/* Navbar */
-.navbar {
-    background: rgba(0, 0, 0, 0.55) !important;
-    backdrop-filter: blur(10px);
-}
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 26px;
+        }
 
-/* Card styling */
-.premium-card {
-    background: white;
-    border-radius: 20px;
-    padding: 1rem;
-    animation: fadeIn 0.6s ease-in-out;
-}
+        label {
+            font-size: 15px;
+            display: block;
+            margin: 12px 0 5px;
+            opacity: 0.9;
+        }
 
-/* Input fields */
-.premium-input {
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    padding: 8px 10px;
-}
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            margin-bottom: 5px;
+        }
 
-/* Prediction result box */
-.result-box {
-    background: #f1f8ff;
-    padding: 15px;
-    border-left: 5px solid #007bff;
-    border-radius: 10px;
-}
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #38bdf8;
+            border: none;
+            color: #0f172a;
+            font-weight: bold;
+            font-size: 17px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
 
-/* Fade animation */
-.fade-in {
-    animation: fadeIn 1s ease-in-out;
-}
+        .btn:hover {
+            background: #0ea5e9;
+            transform: translateY(-3px);
+            box-shadow: 0px 6px 20px rgba(14,165,233,0.5);
+        }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-</style>
-
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            text-align: center;
+            background: rgba(255,255,255,0.12);
+            border-radius: 12px;
+            font-size: 18px;
+        }
+    </style>
 </head>
 
-<body class="bg-gradient">
+<body>
 
-<nav class="navbar navbar-dark navbar-expand-lg shadow-sm">
-  <div class="container">
-    <a class="navbar-brand fw-bold fs-3" href="{{ url_for('index') }}">🔥 FWI Predictor</a>
-  </div>
-</nav>
+<div class="form-box">
+    <h2>🔥 Enter Values to Predict Fire Index</h2>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-6">
+    <form method="POST">
 
-            <div class="card shadow-lg rounded-4 border-0 premium-card">
-                <div class="card-body p-4">
+        <label>Temperature</label>
+        <input type="number" name="Temperature" step="any" required>
 
-                    <h3 class="text-center fw-bold mb-4">Enter Parameters</h3>
+        <label>Relative Humidity</label>
+        <input type="number" name="RH" step="any" required>
 
-                    <form action="{{ url_for('predict_datapoint') }}" method="post" class="row g-3">
+        <label>Wind Speed</label>
+        <input type="number" name="Ws" step="any" required>
 
-                        {% for field in ['Temperature','RH','Ws','Rain','FFMC','DMC','ISI','Classes','Region'] %}
-                        <div class="col-md-6">
-                            <label class="form-label">{{ field }}</label>
-                            <input type="number" step="any" name="{{ field }}" class="form-control premium-input" required>
-                        </div>
-                        {% endfor %}
+        <label>Rainfall</label>
+        <input type="number" name="Rain" step="any" required>
 
-                        <div class="col-12 d-grid mt-3">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow">
-                                Predict Now
-                            </button>
-                        </div>
+        <label>FFMC</label>
+        <input type="number" name="FFMC" step="any" required>
 
-                    </form>
+        <label>DMC</label>
+        <input type="number" name="DMC" step="any" required>
 
-                    {% if results is not none %}
-                    <div class="result-box text-center mt-4 fade-in">
-                        <h4 class="fw-bold">FWI Prediction</h4>
-                        <p class="fs-4">{{ results }}</p>
-                    </div>
-                    {% endif %}
+        <label>ISI</label>
+        <input type="number" name="ISI" step="any" required>
 
-                    <!-- BACK TO HOME BUTTON -->
-                    <div class="text-center mt-4">
-                        <a href="{{ url_for('index') }}" class="btn btn-light btn-lg shadow rounded-pill">
-                            ← Back to Home
-                        </a>
-                    </div>
+        <label>Classes</label>
+        <input type="number" name="Classes" step="any" required>
 
-                </div>
-            </div>
+        <label>Region</label>
+        <input type="number" name="Region" step="any" required>
 
-        </div>
+        <button class="btn" type="submit">Predict</button>
+    </form>
+
+    {% if results %}
+    <div class="result-box">
+        🔥 Predicted Fire Index: <b>{{ results }}</b>
     </div>
+    {% endif %}
 </div>
 
 </body>
