@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FWI Prediction</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+/* Background gradient */
+.bg-gradient {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    background: rgba(0, 0, 0, 0.55) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Card styling */
+.premium-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1rem;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Input fields */
+.premium-input {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 8px 10px;
+}
+
+/* Prediction result box */
+.result-box {
+    background: #f1f8ff;
+    padding: 15px;
+    border-left: 5px solid #007bff;
+    border-radius: 10px;
+}
+
+/* Fade animation */
+.fade-in {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+</head>
+
+<body class="bg-gradient">
+
+<nav class="navbar navbar-dark navbar-expand-lg shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold fs-3" href="{{ url_for('index') }}">🔥 FWI Predictor</a>
+  </div>
+</nav>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+
+            <div class="card shadow-lg rounded-4 border-0 premium-card">
+                <div class="card-body p-4">
+
+                    <h3 class="text-center fw-bold mb-4">Enter Parameters</h3>
+
+                    <form action="{{ url_for('predict_datapoint') }}" method="post" class="row g-3">
+
+                        {% for field in ['Temperature','RH','Ws','Rain','FFMC','DMC','ISI','Classes','Region'] %}
+                        <div class="col-md-6">
+                            <label class="form-label">{{ field }}</label>
+                            <input type="number" step="any" name="{{ field }}" class="form-control premium-input" required>
+                        </div>
+                        {% endfor %}
+
+                        <div class="col-12 d-grid mt-3">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow">
+                                Predict Now
+                            </button>
+                        </div>
+
+                    </form>
+
+                    {% if results is not none %}
+                    <div class="result-box text-center mt-4 fade-in">
+                        <h4 class="fw-bold">FWI Prediction</h4>
+                        <p class="fs-4">{{ results }}</p>
+                    </div>
+                    {% endif %}
+
+                    <!-- BACK TO HOME BUTTON -->
+                    <div class="text-center mt-4">
+                        <a href="{{ url_for('index') }}" class="btn btn-light btn-lg shadow rounded-pill">
+                            ← Back to Home
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
